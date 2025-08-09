@@ -1,34 +1,60 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './index.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState(['items1', 'items2', 'items3'])
+
+  const [inputValue, setInputValue] = useState('');
+
+  const addItem = () => {
+    if (inputValue.trim() === "") return;
+    if (inputValue && !tasks.includes(inputValue)) {
+      setTasks([...tasks, inputValue])
+      setInputValue("");
+    }
+  }
+
+  const removeItem = (task) => {
+    setTasks(tasks.filter((_, i) => i !== task))
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div className="min-h-screen flex flex-col">
+      <header className="mt-10 text-center text-6xl font-bold">
+        <h1>To-Do List</h1>
+      </header>
+      
+      <main className="flex-1 mt-30 text-center">
+        <input 
+          type="text" 
+          placeholder="Type item..."
+          value={inputValue} 
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+
+        <button onClick={addItem}>
+          Add Item
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+        <ul className="mt-20 text-4xl list-none p-0">
+          {tasks.map((task, i) => (
+            <li key={i}>
+              {task}
+                <button 
+                  onClick={() => removeItem(i)}  
+                >
+                  ❌
+                </button>
+            </li>
+          ))}
+        </ul>
+
+      </main>
+
+      <footer className="text-center text-4xl">
+        <p>Footer</p>
+      </footer>
+    </div>
   )
 }
 
