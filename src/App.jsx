@@ -2,28 +2,46 @@ import { useState } from "react";
 import "./index.css";
 
 export default function App() {
-  // Keep a stable id for each task (better keys, easier deletes)
-  const [tasks, setTasks] = useState([
-    { id: 1, text: "items1" },
-    { id: 2, text: "items2" },
-    { id: 3, text: "items3" },
-  ]);
+  // List of tasks
+  const [tasks, setTasks] = useState([]);
+
+  // Use to store user input
   const [inputValue, setInputValue] = useState("");
 
+  // Duplicate flag
+  const [isDuplicate, setIsDuplicate] = useState(false);
+
+  // Add a new task
   const handleAdd = (e) => {
+    // Stop submission refreshing the page
     e.preventDefault();
+
+    // Removes leading/trailing whitespace
     const text = inputValue.trim();
+
+    // If empty, do nothing
     if (!text) return;
 
-    // case-insensitive duplicate check
-    const exists = tasks.some(t => t.text.toLowerCase() === text.toLowerCase());
-    if (exists) return;
+    // Duplicate check
+    if (tasks.some(t => t.text.toLowerCase() === text.toLowerCase())) {
+      setIsDuplicate(true);
+      setInputValue("");
+      return;
+    }
+    else {
+      setIsDuplicate(false);
+    }
 
+    // Add new task to the list
     setTasks(prev => [...prev, { id: Date.now(), text }]);
+
+    // Cleaes the input field
     setInputValue("");
   };
 
+  // Remove a task
   const removeItem = (id) => {
+    // Replaces array with new array excluding the removed task
     setTasks(prev => prev.filter(t => t.id !== id));
   };
 
@@ -31,18 +49,26 @@ export default function App() {
     <div className="min-h-screen flex flex-col bg-gray-50">
       
       {/* Header */}
-      <header className="py-8 shadow-sm bg-white">
+      <header className="py-10 shadow-sm bg-white">
         <h1 className="text-4xl font-bold text-center">To-Do List</h1>
       </header>
 
       {/* Main (centered) */}
-      <main className="flex-1 flex flex-col items-center justify-center">
+      <main className="flex-1 flex flex-col items-center justify-center mx-6">
+        {/* If duplicate, show message */}
+        {isDuplicate && (
+          <div className="mb-4 text-red-600">
+            Task already exists. Please enter a different task.
+          </div>
+          
+        )}
+
         {/* Add form */}
-        <form onSubmit={handleAdd} className="w-full max-w-xl flex gap-3">
+        <form onSubmit={handleAdd} className="flex w-full max-w-xl gap-3">
           <input
             type="text"
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(inputText) => setInputValue(inputText.target.value)}
             placeholder="Type a task…"
             className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-3 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             autoFocus
@@ -58,10 +84,12 @@ export default function App() {
 
         {/* Task list */}
         <ul className="w-full max-w-xl mt-8 space-y-3 list-none p-0">
+
+          {/* If no tasks, show a message */}
           {tasks.length === 0 && (
             <li className="text-center text-gray-500">No tasks yet. Add one above.</li>
           )}
-
+        
           {tasks.map(({ id, text }) => (
             <li
               key={id}
@@ -69,13 +97,14 @@ export default function App() {
             >
               <span className="text-lg">{text}</span>
 
+              {/* Remove button */}
               <button
                 onClick={() => removeItem(id)}
                 aria-label={`Remove ${text}`}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-red-50 hover:text-red-600"
+                className="inline-flex h-8 w-8 items-center justify-center text-gray-600"
                 title="Remove"
               >
-                ✖️
+                X
               </button>
             </li>
           ))}
