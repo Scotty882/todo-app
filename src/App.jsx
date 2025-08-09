@@ -1,35 +1,120 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./index.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  // List of tasks
+  const [tasks, setTasks] = useState([]);
+
+  // Use to store user input
+  const [inputValue, setInputValue] = useState("");
+
+  // Duplicate flag
+  const [isDuplicate, setIsDuplicate] = useState(false);
+
+  // Add a new task
+  const handleAdd = (e) => {
+    // Stop submission refreshing the page
+    e.preventDefault();
+
+    // Removes leading/trailing whitespace
+    const text = inputValue.trim();
+
+    // If empty, do nothing
+    if (!text) return;
+
+    // Duplicate check
+    if (tasks.some(t => t.text.toLowerCase() === text.toLowerCase())) {
+      setIsDuplicate(true);
+      setInputValue("");
+      return;
+    }
+    else {
+      setIsDuplicate(false);
+    }
+
+    // Add new task to the list
+    setTasks(prev => [...prev, { id: Date.now(), text }]);
+
+    // Cleaes the input field
+    setInputValue("");
+  };
+
+  // Remove a task
+  const removeItem = (id) => {
+    // Replaces array with new array excluding the removed task
+    setTasks(prev => prev.filter(t => t.id !== id));
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      
+      {/* Header */}
+      <header className="py-10 shadow-sm bg-white">
+        <h1 className="text-4xl font-bold text-center">To-Do List</h1>
+      </header>
 
-export default App
+      {/* Main (centered) */}
+      <main className="flex-1 flex flex-col items-center justify-center mx-6">
+        {/* If duplicate, show message */}
+        {isDuplicate && (
+          <div className="mb-4 text-red-600">
+            Task already exists. Please enter a different task.
+          </div>
+          
+        )}
+
+        {/* Add form */}
+        <form onSubmit={handleAdd} className="flex w-full max-w-xl gap-3">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(inputText) => setInputValue(inputText.target.value)}
+            placeholder="Type a task…"
+            className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-3 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            autoFocus
+            aria-label="Task name"
+          />
+          <button
+            type="submit"
+            className="rounded-lg px-5 py-3 bg-blue-600 text-white font-semibold hover:bg-blue-700 active:scale-[0.99]"
+          >
+            Add
+          </button>
+        </form>
+
+        {/* Task list */}
+        <ul className="w-full max-w-xl mt-8 space-y-3 list-none p-0">
+
+          {/* If no tasks, show a message */}
+          {tasks.length === 0 && (
+            <li className="text-center text-gray-500">No tasks yet. Add one above.</li>
+          )}
+        
+          {tasks.map(({ id, text }) => (
+            <li
+              key={id}
+              className="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm"
+            >
+              <span className="text-lg">{text}</span>
+
+              {/* Remove button */}
+              <button
+                onClick={() => removeItem(id)}
+                aria-label={`Remove ${text}`}
+                className="inline-flex h-8 w-8 items-center justify-center text-gray-600"
+                title="Remove"
+              >
+                X
+              </button>
+            </li>
+          ))}
+        </ul>
+      </main>
+
+      {/* Footer anchored to bottom */}
+      <footer className="py-6 text-center text-sm text-gray-500">
+        © {new Date().getFullYear()} My Todo App
+      </footer>
+    </div>
+  );
+}
