@@ -68,7 +68,7 @@ export default function App() {
         )}
 
         {/* Add form */}
-        <form onSubmit={handleAdd} className="flex w-full max-w-xl gap-3">
+        <form onSubmit={handleAdd} className="flex w-full max-w-3xl gap-3">
           <input
             type="text"
             value={taskValue}
@@ -83,7 +83,7 @@ export default function App() {
             type="date"
             value={dueDateValue}
             onChange={(e) => setDueDateValue(e.target.value)}
-            className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-3 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            className="rounded-lg border border-gray-300 bg-white px-4 py-3 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             autoFocus
             aria-label="Task name"
           />
