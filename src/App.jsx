@@ -38,7 +38,7 @@ export default function App() {
     // Add new task to the list
     setTasks(prev => [...prev, { id: Date.now(), text, dueDate}]);
 
-    // Cleaes the input field
+    // Cleaes the input fields
     setTaskValue("");
     setDueDateValue("");
   };
@@ -108,7 +108,7 @@ export default function App() {
           {tasks.length > 0 && (
             <div className="flex justify-between mb-2">
               <p className="text-lg font-semibold mb-2">Tasks:</p>
-              <p className="text-lg font-semibold mb-2 mx-22">Due Date:</p>
+              <p className="text-lg font-semibold mb-2 mx-27">Due Date:</p>
             </div>
           )}
         
