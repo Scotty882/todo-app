@@ -47,6 +47,13 @@ export default function App() {
   // Remove a task
   const removeItem = (id) => {
     // Replaces array with new array excluding the removed task
+    setCompletedTasks(prev => prev.filter(t => t.id !== id));
+  };
+
+  // Complete a task
+  const completeItem = (id, text, dueDate) => {
+    // Replaces array with new array excluding the removed task
+    setCompletedTasks(prev => [...prev, { id, text, dueDate}]);
     setTasks(prev => prev.filter(t => t.id !== id));
   };
 
@@ -122,12 +129,10 @@ export default function App() {
 
               <span className="text-lg px-10">{dueDate}</span>
 
-              {/* Remove button */}
+              {/* Complete button */}
               <button
-                onClick={() => removeItem(id)}
-                aria-label={`Remove ${text}`}
+                onClick={() => completeItem(id, text, dueDate)}
                 className="inline-flex items-center justify-center text-gray-600 hover:text-gray-800"
-                title="Remove"
               >
                 Complete
               </button>
@@ -141,6 +146,27 @@ export default function App() {
             Completed Tasks
           </p>
         )}
+
+        <ul className="w-full max-w-xl mt-8 space-y-3 list-none p-0">
+          {completedTasks.map(({ id, text, dueDate}) => (
+            <li
+              key={id}
+              className="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm"
+            >
+              <span className="text-lg flex-1">{text}</span>
+
+              <span className="text-lg px-10">{dueDate}</span>
+
+              {/* Complete button */}
+              <button
+                onClick={() => removeItem(id, text, dueDate)}
+                className="inline-flex items-center justify-center text-gray-600 hover:text-gray-800"
+              >
+                X
+              </button>
+            </li>
+          ))}
+        </ul>
 
       </main>
 
