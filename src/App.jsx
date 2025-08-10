@@ -142,12 +142,12 @@ export default function App() {
 
         {/* Completed tasks */}
         {completedTasks.length > 0 && (
-          <p className="mt-8 w-full max-w-xl">
+          <p className="mt-12 text-md w-full max-w-xl">
             Completed Tasks
           </p>
         )}
 
-        <ul className="w-full max-w-xl mt-8 space-y-3 list-none p-0">
+        <ul className="w-full max-w-xl mt-2 space-y-3 list-none p-0">
           {completedTasks.map(({ id, text, dueDate}) => (
             <li
               key={id}
@@ -160,7 +160,7 @@ export default function App() {
               {/* Complete button */}
               <button
                 onClick={() => removeItem(id, text, dueDate)}
-                className="inline-flex items-center justify-center text-gray-600 hover:text-gray-800"
+                className="inline-flex items-center justify-center text-gray-600 hover:text-gray-800 mx-7"
               >
                 X
               </button>
