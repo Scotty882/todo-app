@@ -109,7 +109,7 @@ export default function App() {
           {tasks.length > 0 && (
             <div className="flex justify-between mb-2">
               <p className="text-lg font-semibold mb-2">Tasks:</p>
-              <p className="text-lg font-semibold mb-2 mx-27">Due Date:</p>
+              <p className="text-lg font-semibold mb-2 mx-36">Due Date:</p>
             </div>
           )}
         
@@ -126,10 +126,10 @@ export default function App() {
               <button
                 onClick={() => removeItem(id)}
                 aria-label={`Remove ${text}`}
-                className="inline-flex h-8 w-8 items-center justify-center text-gray-600"
+                className="inline-flex items-center justify-center text-gray-600 hover:text-gray-800"
                 title="Remove"
               >
-                X
+                Complete
               </button>
             </li>
           ))}
