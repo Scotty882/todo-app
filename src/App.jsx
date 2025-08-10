@@ -6,7 +6,8 @@ export default function App() {
   const [tasks, setTasks] = useState([]);
 
   // Use to store user input
-  const [inputValue, setInputValue] = useState("");
+  const [taskValue, setTaskValue] = useState("");
+  const [dueDateValue, setDueDateValue] = useState("");
 
   // Duplicate flag
   const [isDuplicate, setIsDuplicate] = useState(false);
@@ -17,7 +18,8 @@ export default function App() {
     e.preventDefault();
 
     // Removes leading/trailing whitespace
-    const text = inputValue.trim();
+    const text = taskValue.trim();
+    const dueDate = dueDateValue.trim();
 
     // If empty, do nothing
     if (!text) return;
@@ -25,7 +27,8 @@ export default function App() {
     // Duplicate check
     if (tasks.some(t => t.text.toLowerCase() === text.toLowerCase())) {
       setIsDuplicate(true);
-      setInputValue("");
+      setTaskValue("");
+      console.log("Duplicate task detected:", text);
       return;
     }
     else {
@@ -33,10 +36,11 @@ export default function App() {
     }
 
     // Add new task to the list
-    setTasks(prev => [...prev, { id: Date.now(), text }]);
+    setTasks(prev => [...prev, { id: Date.now(), text, dueDate}]);
 
     // Cleaes the input field
-    setInputValue("");
+    setTaskValue("");
+    setDueDateValue("");
   };
 
   // Remove a task
@@ -67,13 +71,24 @@ export default function App() {
         <form onSubmit={handleAdd} className="flex w-full max-w-xl gap-3">
           <input
             type="text"
-            value={inputValue}
-            onChange={(inputText) => setInputValue(inputText.target.value)}
+            value={taskValue}
+            onChange={(e) => setTaskValue(e.target.value)}
             placeholder="Type a task…"
             className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-3 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             autoFocus
             aria-label="Task name"
           />
+
+          <input
+            type="text"
+            value={dueDateValue}
+            onChange={(e) => setDueDateValue(e.target.value)}
+            placeholder="Due Date: DD-MM"
+            className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-3 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            autoFocus
+            aria-label="Task name"
+          />
+
           <button
             type="submit"
             className="rounded-lg px-5 py-3 bg-blue-600 text-white font-semibold hover:bg-blue-700 active:scale-[0.99]"
@@ -90,12 +105,14 @@ export default function App() {
             <li className="text-center text-gray-500">No tasks yet. Add one above.</li>
           )}
         
-          {tasks.map(({ id, text }) => (
+          {tasks.map(({ id, text, dueDate}) => (
             <li
               key={id}
               className="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm"
             >
-              <span className="text-lg">{text}</span>
+              <span className="text-lg flex-1">{text}</span>
+
+              <span className="text-lg px-10">{dueDate}</span>
 
               {/* Remove button */}
               <button
