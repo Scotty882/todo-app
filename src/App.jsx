@@ -104,6 +104,14 @@ export default function App() {
           {tasks.length === 0 && (
             <li className="text-center text-gray-500">No tasks yet. Add one above.</li>
           )}
+          
+          {/* Task headers */}
+          {tasks.length > 0 && (
+            <div className="flex justify-between mb-2">
+              <p className="text-lg font-semibold mb-2">Tasks:</p>
+              <p className="text-lg font-semibold mb-2 mx-22">Due Date:</p>
+            </div>
+          )}
         
           {tasks.map(({ id, text, dueDate}) => (
             <li
