@@ -4,6 +4,7 @@ import "./index.css";
 export default function App() {
   // List of tasks
   const [tasks, setTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
 
   // Use to store user input
   const [taskValue, setTaskValue] = useState("");
@@ -133,6 +134,14 @@ export default function App() {
             </li>
           ))}
         </ul>
+
+        {/* Completed tasks */}
+        {completedTasks.length > 0 && (
+          <p className="mt-8 w-full max-w-xl">
+            Completed Tasks
+          </p>
+        )}
+
       </main>
 
       {/* Footer anchored to bottom */}
